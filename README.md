@@ -2,8 +2,6 @@
 Collection of basic javascript tools
 
 # Contents
-Inside the folder script_tools you can find scripts that add utility functions.
-
 - script_tools:
   Folder with the scripts.
   - advancedCreateE:
