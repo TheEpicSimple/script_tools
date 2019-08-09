@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Another table</title>
+
+  <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+
+  <div id="app">  </div>
+
+  <div>
+    <p> meta represents the columns of the table, this propertie has some possibilities: </p>
+    <pre>
+      interface tablableDataMeta
+      {
+        title : string; // header string, what appears as &lt;th&gt;.
+        name?: string; // name corresponds to the propertie with the same name of the objects in the data.
+        calc?: (item : object) => string // The cell value will be calculated.
+        // You supply the way this is done with a function that receives the object and returns a string.
+        // calc overwrites name.
+        link? : (item : object) => string // The returned result of this function will be the url to which the cell content points
+        events ?: Array&lt; eventeableData &gt; // Array that describes the events you want in each cell
+      }
+
+      interface eventeableData
+      {
+        name : string // event name, like click, mouseover or whatever event name
+        function : ( event : eventdata, item : object ) => void
+      }
+    </pre>
+  </div>
+
+<script src="../script_tools/advancedCreateE.js"></script>
+<script src="../script_tools/parseTablableData.js"></script>
+<script>
+  var doSomethingInformative = function (event, item)
+  {
+    // this === interacted html element
+    if(this.style.backgroundColor === "")
+    {
+      this.style.backgroundColor = "red";
+    }
+    else
+    {
+      this.style.backgroundColor = "";
+    };
+    // event === standart event data
+    console.log(event);
+    // item === item from the data that corresponds to the row clicked
+    console.log(item);
+  };
+
+  var doSomethingElse = function (event, item)
+  {
+    // this === interacted html element
+    this.innerText = item[2] + " does not have any particular meaning.";
+    // event === standart event data
+    console.log(event);
+    // item === item from the data that corresponds to the row clicked
+    item[2] += "<-";
+  };
+
+  var tablableData = {
+    meta:[
+      { title: "Name", name: "name" },
+      {title: "Surname", name: "surr"},
+      {title: "Random Text", name: 2},
+      {
+        title: "link", name: "name",
+        link: function(item){ return "./" + item.name + ".html"; }
+      },
+      {title: "events", name: "surr", events: [{ action: doSomethingInformative, name: "click"}] },
+      {title: "calc", calc: function(item){ return item.name + " º  " + item.surr }},
+      {title: "calc + events", calc: function(item){ return item.name + " º  " + item.surr }, events: [{ action: doSomethingElse, name: "click"}] }
+    ],
+    data:[
+      {name: "jhon0", surr: "jhon0s", 2: "ad"},
+      {name: "jhon1", surr: "jhon1s", 2: "asd"},
+      {name: "jhon2", surr: "jhon2s", 2: "abd"},
+      {name: "jhon3", surr: "jhon3s", 2: "asad"},
+      {name: "jhon4", surr: "jhon4s", 2: "asid"},
+      {name: "jhon5", surr: "jhon5s", 2: "asado"},
+      {name: "jhon6", surr: "jhon6s", 2: "ads"},
+      {name: "jhon7", surr: "jhon7s", 2: "andd"},
+      {name: "jhon8", surr: "jhon8s", 2: "sada"},
+      {name: "jhon9", surr: "jhon9s", 2: "dd"},
+      {name: "jhon10", surr: "jhon10s", 2: "as"},
+    ]
+  };
+  
+  document.getElementById("app").appendChild( script_tools.parseTablableData(tablableData) );
+</script>
+</body>
+</html>

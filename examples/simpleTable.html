@@ -13,6 +13,22 @@
 
   <div id="app">  </div>
 
+  <div>
+    <p> parseTablableData takes an array of objects as an argument .</p>
+
+    <p>object could be said that uses the following interface:</p>
+    <pre>
+      interface tablableData
+      {
+        meta?: tablableDataMeta[];
+
+        data: object[];
+      }
+    </pre>
+
+    <p>You can also describe how to represent the data with the optional meta propertie.</p>
+  </div>
+
 <script src="../script_tools/advancedCreateE.js"></script>
 <script src="../script_tools/parseTablableData.js"></script>
 <script>
@@ -34,16 +50,6 @@
   };
 
   var tablableData = {
-    meta:[
-      {
-        title: "Name", name: "name",
-        link: function(item){ return "./" + item.name + ".html"; }
-      },
-      {title: "Surname", name: "surr"},
-      {title: "Random Text", name: 2},
-      {title: "Interactive", name: "surr", events: [{ action: doSomethingInformative, name: "click"}] },
-      {title: "calc", calc: function(item){ return item.name + " " + item.surr }}
-    ],
     data:[
       {name: "jhon0", surr: "jhon0s", 2: "ad"},
       {name: "jhon1", surr: "jhon1s", 2: "asd"},
