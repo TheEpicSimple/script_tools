@@ -23,6 +23,7 @@
         calc?: (item : object) => string // The cell value will be calculated.
         // You supply the way this is done with a function that receives the object and returns a string.
         // calc overwrites name.
+        icon? : creates an &lt;i&gt; element with the class that you specify so you can add an icon with css.
         link? : (item : object) => string // The returned result of this function will be the url to which the cell content points
         events ?: Array&lt; eventeableData &gt; // Array that describes the events you want in each cell
       }
