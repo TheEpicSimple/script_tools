@@ -53,7 +53,7 @@
           nCV.childs = [];
 
           var nT = "";
-
+          var ic = null;
 
           if (tblD.meta[_j].name !== undefined)
           {
@@ -63,6 +63,15 @@
           if (tblD.meta[_j].calc !== undefined)
           {
             nT = tblD.meta[_j].calc( tblD.data[_i] );
+          }
+
+          if( tblD.meta[_j].icon !== undefined )  
+          {
+            ic = add$(
+            {
+              name: "i",
+              attrs: { class: tblD.meta[_j].icon }
+            } );
           }
 
           if( tblD.meta[_j].link !== undefined )  
@@ -80,6 +89,7 @@
           else
           {
             nCV.text = nT;
+            nCV.childs.push( ic );
           }
 
           if ( tblD.meta[_j].events !== undefined)
@@ -151,9 +161,9 @@
       {
         var tds = [];
 
-        for (var _j = 0; _j < tbDK.length; _j++)
+        for (var j = 0; j < tbDK.length; j++)
         {
-          tds.push( add$(  {name: "td", text: tblD.data[i][ tbDK[_j] ] }  ) );
+          tds.push( add$(  {name: "td", text: tblD.data[i][ tbDK[j] ] }  ) );
         }
 
         tbRows.push( add$(  {name: "tr", childs : tds}  ) );
