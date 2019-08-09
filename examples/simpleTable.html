@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Simple table</title>
+
+  <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+
+  <div id="app">  </div>
+
+<script src="../script_tools/advancedCreateE.js"></script>
+<script src="../script_tools/parseTablableData.js"></script>
+<script>
+  var doSomethingInformative = function (event, item)
+  {
+    // this === interacted html element
+    if(this.style.backgroundColor === "")
+    {
+      this.style.backgroundColor = "red";
+    }
+    else
+    {
+      this.style.backgroundColor = "";
+    };
+    // event === standart event data
+    console.log(event);
+    // item === item from the data that corresponds to the row clicked
+    console.log(item);
+  };
+
+  var tablableData = {
+    meta:[
+      {
+        title: "Name", name: "name",
+        link: function(item){ return "./" + item.name + ".html"; }
+      },
+      {title: "Surname", name: "surr"},
+      {title: "Random Text", name: 2},
+      {title: "Interactive", name: "surr", events: [{ action: doSomethingInformative, name: "click"}] },
+      {title: "calc", calc: function(item){ return item.name + " " + item.surr }}
+    ],
+    data:[
+      {name: "jhon0", surr: "jhon0s", 2: "ad"},
+      {name: "jhon1", surr: "jhon1s", 2: "asd"},
+      {name: "jhon2", surr: "jhon2s", 2: "abd"},
+      {name: "jhon3", surr: "jhon3s", 2: "asad"},
+      {name: "jhon4", surr: "jhon4s", 2: "asid"},
+      {name: "jhon5", surr: "jhon5s", 2: "asado"},
+      {name: "jhon6", surr: "jhon6s", 2: "ads"},
+      {name: "jhon7", surr: "jhon7s", 2: "andd"},
+      {name: "jhon8", surr: "jhon8s", 2: "sada"},
+      {name: "jhon9", surr: "jhon9s", 2: "dd"},
+      {name: "jhon10", surr: "jhon10s", 2: "as"},
+    ]
+  };
+  
+  document.getElementById("app").appendChild( script_tools.parseTablableData(tablableData) );
+</script>
+</body>
+</html>
