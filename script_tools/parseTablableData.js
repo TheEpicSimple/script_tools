@@ -12,11 +12,23 @@
   }
 
   var add$ = script_tools.advancedCreateE;
+
+  function areOH(metaData)
+  {
+    for (var i = 0; i < metaData.length; i++)
+    {
+      if (metaData[i].overHeader !== undefined)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
   
   function fn (tablableData)
   {
     var tblD = tablableData;
-
     var thead, tbody, tfoot;
 
     if(tblD.data === undefined)
@@ -27,18 +39,43 @@
 
     if(tblD.meta !== undefined)
     {
-      var tbHeadrs = [];
-      for (var i = 0; i < tblD.meta.length; i++)
+      var oHs = areOH(tblD.meta);
+
+      var tbHR = [],
+        tbHeadrs = [],
+        tbOH = [];
+      
+      if(oHs)
       {
-        tbHeadrs.push( add$(  {name: "th", text: tblD.meta[i].title}  ) );
+        for (var i = 0; i < tblD.meta.length; i++)
+        {
+          if(tblD.meta[i].overHeader !== undefined)
+          {
+            tbOH.push( add$(  {name: "th", childs: [ tblD.meta[i].overHeader ]}  ) );
+          }
+          else
+          {
+            tbOH.push( add$( {name: "th"}) );
+          }
+
+          tbHeadrs.push( add$(  {name: "th", text: tblD.meta[i].title}  ) );
+        }
+        tbHR.push( add$( {name: "tr", childs: tbOH } ) );
       }
+      else
+      {
+        for (var i = 0; i < tblD.meta.length; i++)
+        {
+          tbHeadrs.push( add$(  {name: "th", text: tblD.meta[i].title}  ) );
+        }
+      }
+      
+      tbHR.push( add$( {name: "tr", childs: tbHeadrs } ) );
 
       thead = add$(
       {
         name: "thead",
-        childs: [
-          add$( {name: "tr", childs: tbHeadrs } )
-        ]
+        childs: tbHR
       } );
       
       var tbRows = [];
