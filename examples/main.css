@@ -41,6 +41,13 @@ table th
   font-weight: bolder;
 }
 
+.o-icon::before
+{
+  content: "O";
+
+  font-weight: bolder;
+}
+
 #app
 {
   padding: 10px;

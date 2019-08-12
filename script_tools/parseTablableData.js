@@ -79,91 +79,113 @@
       } );
       
       var tbRows = [];
-
-      var _loopI= function(_i)
+      if( tblD.data.length !== 0 )
       {
-        tds = [];
-
-        var _loopJ= function(_j)
+        var _loopI= function(_i)
         {
-          var nCV = {name: "td"};
-          nCV.childs = [];
+          tds = [];
 
-          var nT = "";
-          var ic = null;
-
-          if (tblD.meta[_j].name !== undefined)
+          var _loopJ= function(_j)
           {
-            nT = tblD.data[_i][ tblD.meta[_j].name ];
-          }
+            var nCV = {name: "td"};
+            nCV.childs = [];
 
-          if (tblD.meta[_j].calc !== undefined)
-          {
-            nT = tblD.meta[_j].calc( tblD.data[_i] );
-          }
+            var nT = "";
+            var ic = null;
 
-          if( tblD.meta[_j].icon !== undefined )  
-          {
-            ic = add$(
+            if (tblD.meta[_j].name !== undefined)
             {
-              name: "i",
-              attrs: { class: tblD.meta[_j].icon }
-            } );
-          }
+              nT = tblD.data[_i][ tblD.meta[_j].name ];
+            }
 
-          if( tblD.meta[_j].link !== undefined )  
-          {
-            nCV.childs.push(
-              add$(
+            if (tblD.meta[_j].calc !== undefined)
+            {
+              nT = tblD.meta[_j].calc( tblD.data[_i] );
+            }
+
+            if( tblD.meta[_j].icon !== undefined )  
+            {
+              if (typeof tblD.meta[_j].icon === "string" )
               {
-                name: "a",
-                text: nT,
-                attrs: { href: tblD.meta[_j].link( tblD.data[_i] ) },
-                childs: [ add$({name:"span"}) ]
-              } )
-            );
-          }
-          else
-          {
-            nCV.text = nT;
-            nCV.childs.push( ic );
-          }
-
-          if ( tblD.meta[_j].events !== undefined)
-          {
-            nCV.events = [];
-
-            var _loopK= function(_k)
-            {
-              nCV.events.push( {
-                name: tblD.meta[_j].events[_k].name,
-                action: function (e)
+                ic = add$(
                 {
-                  var fn = tblD.meta[_j].events[_k].action.bind(this, e, tblD.data[_i]);
-                  fn();
-                }
-              } );
+                  name: "i",
+                  attrs: { class: tblD.meta[_j].icon }
+                } );
+              }
+              else if ( typeof tblD.meta[_j].icon === "function" )
+              {
+                ic = add$(
+                {
+                  name: "i",
+                  attrs: { class: tblD.meta[_j].icon(tblD.data[_i]) }
+                } );
+              }
             }
 
-            for (var k = 0; k < tblD.meta[_j].events.length; k++)
+            if( tblD.meta[_j].link !== undefined )  
             {
-              _loopK(k);
+              nCV.childs.push(
+                add$(
+                {
+                  name: "a",
+                  text: nT,
+                  attrs: { href: tblD.meta[_j].link( tblD.data[_i] ) },
+                  childs: [ add$({name:"span"}) ]
+                } )
+              );
             }
+            else
+            {
+              nCV.text = nT;
+              nCV.childs.push( ic );
+            }
+
+            if ( tblD.meta[_j].events !== undefined)
+            {
+              nCV.events = [];
+
+              var _loopK= function(_k)
+              {
+                nCV.events.push( {
+                  name: tblD.meta[_j].events[_k].name,
+                  action: function (e)
+                  {
+                    var fn = tblD.meta[_j].events[_k].action.bind(this, e, tblD.data[_i]);
+                    fn();
+                  }
+                } );
+              }
+
+              for (var k = 0; k < tblD.meta[_j].events.length; k++)
+              {
+                _loopK(k);
+              }
+            }
+
+            tds.push( add$( nCV ) );
           }
 
-          tds.push( add$( nCV ) );
+          for (var j = 0; j < tblD.meta.length; j++) {
+            _loopJ(j);
+          }
+
+          tbRows.push( add$(  {name: "tr", childs: tds}  ) );
         }
 
-        for (var j = 0; j < tblD.meta.length; j++) {
-          _loopJ(j);
+        for (var i = 0; i < tblD.data.length; i++)
+        {
+          _loopI(i);
         }
-
-        tbRows.push( add$(  {name: "tr", childs: tds}  ) );
       }
-
-      for (var i = 0; i < tblD.data.length; i++)
+      else
       {
-        _loopI(i);
+        var tblC = []
+        for (var i = 0; i < tblD.meta.length; i++)
+        {
+          tblC.push( add$(  {name: "td", attrs: {"data-value": "null"}}  ) );
+        }
+        tbRows.push( add$( {name: "tr", childs: tblC} ) );
       }
 
       tbody = add$({

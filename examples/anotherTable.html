@@ -23,15 +23,16 @@
         calc?: (item : object) => string // The cell value will be calculated.
         // You supply the way this is done with a function that receives the object and returns a string.
         // calc overwrites name.
-        icon? : creates an &lt;i&gt; element with the class that you specify so you can add an icon with css.
+        icon? : string / (item : object) => string // creates an &lt;i&gt; element with the class that you specify so you can add an icon with css.
         link? : (item : object) => string // The returned result of this function will be the url to which the cell content points
-        events ?: Array&lt; eventeableData &gt; // Array that describes the events you want in each cell
+        events? : Array&lt; eventeableData &gt; // Array that describes the events you want in each cell
+        overHeader? : html element that will be in a cell over the header.
       }
 
       interface eventeableData
       {
-        name : string // event name, like click, mouseover or whatever event name
-        function : ( event : eventdata, item : object ) => void
+        name : string // event name, like click or mouseOver
+        function : ( event : eventdata, item : object ) => void // The function that will be executed, note that has one more parameter relating to the item that will be shown
       }
     </pre>
   </div>
@@ -71,7 +72,10 @@
       { title: "Name", name: "name" },
       {title: "Surname", name: "surr"},
       {title: "Random Text", name: 2},
-      {title: "icon", icon: "close-icon"},
+      {
+        title: "icon",
+        icon: function(item){ if(item[2].length > 2){ return "close-icon";}else{return "o-icon"} } 
+      },
       {
         title: "link", name: "name",
         link: function(item){ return "./" + item.name + ".html"; }
