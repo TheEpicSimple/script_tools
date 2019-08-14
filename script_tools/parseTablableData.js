@@ -131,7 +131,7 @@
                   name: "a",
                   text: nT,
                   attrs: { href: tblD.meta[_j].link( tblD.data[_i] ) },
-                  childs: [ add$({name:"span"}) ]
+                  childs: [ ic, add$({name:"span"}) ]
                 } )
               );
             }
