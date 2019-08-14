@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Advanced table</title>
+
+  <link rel="stylesheet" href="./advanced.css">
+  
+  <script>
+  var data = [
+  { "_id": "5d5432a50c94ce802cde66ab",
+    "isActive": false,
+    "balance": "$1,788.09",
+    "age": 32,
+    "eyeColor": "brown",
+    "name": "Jackson James",
+    "gender": "male",
+    "company": "SUNCLIPSE",
+    "email": "jacksonjames@sunclipse.com",
+    "phone": "+1 (876) 421-3575"
+  },
+  { "_id": "5d5432a580cb5d23b33ec1c2",
+    "isActive": false,
+    "balance": "$2,426.88",
+    "age": 28,
+    "eyeColor": "green",
+    "name": "Kirk Watson",
+    "gender": "male",
+    "company": "ACIUM",
+    "email": "kirkwatson@acium.com",
+    "phone": "+1 (899) 426-3465"
+  },
+  { "_id": "5d5432a58a0785b0750b8929",
+    "isActive": false,
+    "balance": "$2,778.66",
+    "age": 34,
+    "eyeColor": "brown",
+    "name": "Suzanne English",
+    "gender": "female",
+    "company": "VENOFLEX",
+    "email": "suzanneenglish@venoflex.com",
+    "phone": "+1 (816) 482-2405"
+  },
+  { "_id": "5d5432a5de3b55d6a649d30e",
+    "isActive": false,
+    "balance": "$3,444.03",
+    "age": 28,
+    "eyeColor": "green",
+    "name": "Mathis Frank",
+    "gender": "male",
+    "company": "SULFAX",
+    "email": "mathisfrank@sulfax.com",
+    "phone": "+1 (970) 446-3424"
+  },
+  { "_id": "5d5432a500591daa404a82b2",
+    "isActive": true,
+    "balance": "$2,035.31",
+    "age": 30,
+    "eyeColor": "blue",
+    "name": "Estelle Mcleod",
+    "gender": "female",
+    "company": "NIMON",
+    "email": "estellemcleod@nimon.com",
+    "phone": "+1 (872) 445-3063"
+  },
+  { "_id": "5d5432a5f9bb525d732dcd64",
+    "isActive": true,
+    "balance": "$3,812.77",
+    "age": 27,
+    "eyeColor": "blue",
+    "name": "Case Malone",
+    "gender": "male",
+    "company": "TROLLERY",
+    "email": "casemalone@trollery.com",
+    "phone": "+1 (856) 438-3895"
+  },
+  { "_id": "5d5432a5bf3a9407322f93d6",
+    "isActive": true,
+    "balance": "$1,484.50",
+    "age": 23,
+    "eyeColor": "blue",
+    "name": "Tammie Dillon",
+    "gender": "female",
+    "company": "EXPOSA",
+    "email": "tammiedillon@exposa.com",
+    "phone": "+1 (814) 488-3392"
+  },
+  { "_id": "5d5432a5850e6c6d31a5502e",
+    "isActive": true,
+    "balance": "$3,083.45",
+    "age": 29,
+    "eyeColor": "blue",
+    "name": "Adkins Cochran",
+    "gender": "male",
+    "company": "HYPLEX",
+    "email": "adkinscochran@hyplex.com",
+    "phone": "+1 (807) 535-2111"
+  },
+  { "_id": "5d5432a57f60aabf2bba3323",
+    "isActive": true,
+    "balance": "$2,733.86",
+    "age": 26,
+    "eyeColor": "green",
+    "name": "Francis Marshall",
+    "gender": "male",
+    "company": "ROCKLOGIC",
+    "email": "francismarshall@rocklogic.com",
+    "phone": "+1 (856) 589-3323"
+  },
+  { "_id": "5d5432a582074e322bccb341",
+    "isActive": true,
+    "balance": "$2,871.54",
+    "age": 28,
+    "eyeColor": "brown",
+    "name": "Mills Briggs",
+    "gender": "male",
+    "company": "UNIWORLD",
+    "email": "millsbriggs@uniworld.com",
+    "phone": "+1 (845) 571-2768"
+  },
+  { "_id": "5d5432a5a4ccba1c9781ed5f",
+    "isActive": true,
+    "balance": "$3,204.30",
+    "age": 40,
+    "eyeColor": "brown",
+    "name": "Bobbi Huffman",
+    "gender": "female",
+    "company": "FLOTONIC",
+    "email": "bobbihuffman@flotonic.com",
+    "phone": "+1 (820) 419-2846"
+  },
+  { "_id": "5d5432a56c6d35f78e8c9a2f",
+    "isActive": true,
+    "balance": "$2,486.94",
+    "age": 23,
+    "eyeColor": "green",
+    "name": "Erickson French",
+    "gender": "male",
+    "company": "ISOTRONIC",
+    "email": "ericksonfrench@isotronic.com",
+    "phone": "+1 (934) 564-2331"
+  },
+  { "_id": "5d54339c14145be52e18cf2e",
+    "isActive": false,
+    "balance": "$3,204.62",
+    "age": 32,
+    "eyeColor": "green",
+    "name": "Bianca Horton",
+    "gender": "female",
+    "company": "ZEROLOGY",
+    "email": "biancahorton@zerology.com",
+    "phone": "+1 (892) 407-3518"
+  },
+  { "_id": "5d54339ccaba0d936d5ce8ff",
+    "isActive": true,
+    "balance": "$1,414.03",
+    "age": 34,
+    "eyeColor": "brown",
+    "name": "Susan Kim",
+    "gender": "female",
+    "company": "ATGEN",
+    "email": "susankim@atgen.com",
+    "phone": "+1 (955) 547-2654"
+  },
+  { "_id": "5d54339cc1b7a0c7839be091",
+    "isActive": false,
+    "balance": "$3,424.00",
+    "age": 40,
+    "eyeColor": "brown",
+    "name": "Deanna Mosley",
+    "gender": "female",
+    "company": "ZAYA",
+    "email": "deannamosley@zaya.com",
+    "phone": "+1 (904) 467-3363"
+  },
+  { "_id": "5d54339ca3f8a9dd89beb015",
+    "isActive": true,
+    "balance": "$1,576.72",
+    "age": 39,
+    "eyeColor": "brown",
+    "name": "Carpenter Gamble",
+    "gender": "male",
+    "company": "SILODYNE",
+    "email": "carpentergamble@silodyne.com",
+    "phone": "+1 (830) 400-3325"
+  },
+  { "_id": "5d54339c9b5a992d01d84d8f",
+    "isActive": true,
+    "balance": "$2,596.04",
+    "age": 36,
+    "eyeColor": "brown",
+    "name": "Mcintosh Herman",
+    "gender": "male",
+    "company": "ASIMILINE",
+    "email": "mcintoshherman@asimiline.com",
+    "phone": "+1 (991) 588-2487"
+  }
+  ];
+  </script>
+</head>
+<body>
+
+  <div id="app">  </div>
+
+<script src="../script_tools/advancedCreateE.js"></script>
+<script src="../script_tools/parseTablableData.js"></script>
+<script>
+  function copyToClipBoard(text)
+  {
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+  }
+
+  var tablableData = {
+    meta: [
+      {
+        title: "Name",
+        name: "name",
+        init: function(i){ this.title = i.email; }
+      },
+      {
+        title: "Eye Color",
+        icon: "icon-eye",
+        init: function(i){ this.style.color = i.eyeColor; this.className = "centerAlignCell";}
+      },
+      {
+        title: "",
+        icon: "icon-phone",
+        class: "phoneColumnHeader",
+        init: function(i){ this.className = "centerAlignCell"; this.title = "Clicking this will save "+i.phone+" to the clipboard"},
+        events: [{name: "click", action: function(ev, item){copyToClipBoard(item.phone);} }]
+      },
+      {title: "Company", name: "company"},
+      {
+        title: "balance",
+        calc: function (i) { return i.balance.replace(/[$,.]/g, ""); },
+        icon: "icon-dollar",
+        link: function(i) { return "https://www.google.com/search?q=how much can I do with "+ i.balance.replace(/[$,.]/g, "") +" cents"; }
+      },
+    ],
+    data: data
+  };
+  
+  document.getElementById("app").appendChild( script_tools.parseTablableData(tablableData) );
+</script>
+</body>
+</html>

@@ -66,7 +66,11 @@
       {
         for (var i = 0; i < tblD.meta.length; i++)
         {
-          tbHeadrs.push( add$(  {name: "th", text: tblD.meta[i].title}  ) );
+          var hC = "";
+          if(tblD.meta[i].class !== undefined)
+          hC = tblD.meta[i].class;
+
+          tbHeadrs.push( add$(  {name: "th", attrs: {class: hC}, text: tblD.meta[i].title}  ) );
         }
       }
       
@@ -151,8 +155,7 @@
                   name: tblD.meta[_j].events[_k].name,
                   action: function (e)
                   {
-                    var fn = tblD.meta[_j].events[_k].action.bind(this, e, tblD.data[_i]);
-                    fn();
+                    tblD.meta[_j].events[_k].action.bind(this, e, tblD.data[_i])();
                   }
                 } );
               }
@@ -163,7 +166,14 @@
               }
             }
 
-            tds.push( add$( nCV ) );
+            var nC = add$( nCV );
+
+            if (tblD.meta[_j].init !== undefined)
+            {
+              tblD.meta[_j].init.bind(nC, tblD.data[_i])();
+            }
+
+            tds.push( nC );
           }
 
           for (var j = 0; j < tblD.meta.length; j++) {
