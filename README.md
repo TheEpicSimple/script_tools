@@ -9,7 +9,7 @@ The objective of this library is to offer tools that improve the workflow of bas
   - **advancedCreateE**:
     Receives an object and returns an &lt;element&gt;. You can define anything of the output &lt;element&gt; through the object parameter. (Tell me if I am missing something.)
   - **parseTablableData**:
-    Receives an object and returns a &lt;table&gt;. the property can have two properties: meta and data.
+    Receives an object and returns a &lt;table&gt;. the object can have two properties: meta and data.
       meta must contain an array. Each element will represent each column of the output &lt;table&gt;.
       data is the actual data that makes up the &lt;tbody&gt;, it has to be an array of objects. Each object will translate into one &lt;tr&gt;.
 - **min**:
