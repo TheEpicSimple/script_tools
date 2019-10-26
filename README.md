@@ -1,17 +1,17 @@
 # script_tools
 Collection of basic javascript tools. (Right now only two)
 
-The objective of this library is to offer tools that improve the workflow of basic operations like creating a <table> or any other <element>.
+The objective of this library is to offer tools that improve the workflow of basic operations like creating a &lt;table&gt; or any other &lt;element&gt;.
 
 # Contents
 - **script_tools**:
   Folder with the scripts.
   - **advancedCreateE**:
-    Receives an object and returns an <element>. You can define anything of the output <element> through the object parameter. (Tell me if I am missing something.)
+    Receives an object and returns an &lt;element&gt;. You can define anything of the output &lt;element&gt; through the object parameter. (Tell me if I am missing something.)
   - **parseTablableData**:
-    Receives an object and returns a <table>. the property can have two properties: meta and data.
-      meta must contain an array. Each element will represent each column of the output <table>.
-      data is the actual data that makes up the <tbody>, it has to be an array of objects. Each object will translate into one <tr>.
+    Receives an object and returns a &lt;table&gt;. the property can have two properties: meta and data.
+      meta must contain an array. Each element will represent each column of the output &lt;table&gt;.
+      data is the actual data that makes up the &lt;tbody&gt;, it has to be an array of objects. Each object will translate into one &lt;tr&gt;.
 - **min**:
   The minified version of the scripts.
 - **examples**:
