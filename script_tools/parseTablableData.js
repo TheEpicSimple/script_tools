@@ -10,9 +10,7 @@
       return;
     }
   }
-
-  var add$ = script_tools.advancedCreateE;
-
+  
   function areOH(metaData)
   {
     for (var i = 0; i < metaData.length; i++)

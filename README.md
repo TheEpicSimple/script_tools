@@ -21,8 +21,10 @@ The objective of this library is to offer tools that improve the workflow of bas
 Copy the scripts to wherever you want to use them. Then you can access the utility function with your own script.
 
 The utility functions are:
- - **script_tools.advancedCreateE** (aka **add$**(by me), but not by default)
- - **script_tools.parseTablableData**
+  - **script_tools.advancedCreateE** (aka **add$**)
+  Dependencies: none
+  - **script_tools.parseTablableData**
+  Dependencies: advancedCreateE
 
 I recommend you to check out the examples.
 

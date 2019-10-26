@@ -86,4 +86,5 @@
   };
 
   window.script_tools.advancedCreateE = fn;
+  window.add$ = fn;
 }) ();
