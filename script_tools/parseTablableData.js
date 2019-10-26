@@ -162,12 +162,14 @@
 
               var _loopK= function(_k)
               {
+                var useCapture = tblD.meta[_j].events[_k].useCapture ? true : false;
                 nCV.events.push( {
                   name: tblD.meta[_j].events[_k].name,
                   action: function (e)
                   {
                     tblD.meta[_j].events[_k].action.call(this, e, tblD.data[_i]);
-                  }
+                  },
+                  useCapture: useCapture
                 } );
               }
 
