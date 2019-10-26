@@ -7,19 +7,19 @@
 
   <title>Another table</title>
 
-  <link rel="stylesheet" href="./main.css">
+  <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
 
   <div id="app">  </div>
 
   <div>
-    <p> meta represents the columns of the table, this propertie has some possibilities: </p>
+    <p> meta represents the columns of the table, this property has some possibilities: </p>
     <pre>
       interface tablableDataMeta
       {
         title : string; // header string, what appears as &lt;th&gt;.
-        name?: string; // name corresponds to the propertie with the same name of the objects in the data.
+        name?: string; // name corresponds to the property with the same name of the objects in the data.
         calc?: (item : object) => string // The cell value will be calculated.
         // You supply the way this is done with a function that receives the object and returns a string.
         // calc overwrites name.
@@ -37,8 +37,8 @@
     </pre>
   </div>
 
-<script src="../script_tools/advancedCreateE.js"></script>
-<script src="../script_tools/parseTablableData.js"></script>
+<script src="../../script_tools/advancedCreateE.js"></script>
+<script src="../../script_tools/parseTablableData.js"></script>
 <script>
   var doSomethingInformative = function (event, item)
   {

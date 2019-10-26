@@ -7,7 +7,7 @@
 
   <title>No-data table</title>
 
-  <link rel="stylesheet" href="./main.css">
+  <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
 
@@ -17,8 +17,8 @@
     <p> You can also set an empty array as data, for whatever reason. (But you have to define it.)</p>
   </div>
 
-<script src="../script_tools/advancedCreateE.js"></script>
-<script src="../script_tools/parseTablableData.js"></script>
+<script src="../../script_tools/advancedCreateE.js"></script>
+<script src="../../script_tools/parseTablableData.js"></script>
 <script>
   var doSomethingInformative = function (event, item)
   {
@@ -49,7 +49,7 @@
 
   var tablableData = {
     meta:[
-      { title: "Name", name: "name" },
+      {title: "Name", name: "name"},
       {title: "Surname", name: "surr"},
       {title: "Random Text", name: 2},
       {title: "icon", icon: "close-icon"},
@@ -58,8 +58,8 @@
         link: function(item){ return "./" + item.name + ".html"; }
       },
       {title: "events", name: "surr", events: [{ action: doSomethingInformative, name: "click"}] },
-      {title: "calc", calc: function(item){ return item.name + " º  " + item.surr }},
-      {title: "calc + events", calc: function(item){ return item.name + " º  " + item.surr }, events: [{ action: doSomethingElse, name: "click"}] }
+      {title: "calc", calc: function(item){ return item.name + " |  " + item.surr }},
+      {title: "calc + events", calc: function(item){ return item.name + " |  " + item.surr }, events: [{ action: doSomethingElse, name: "click"}] }
     ],
     data:[]
   };
