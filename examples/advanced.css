@@ -23,6 +23,11 @@ i
   content: " $ (cents)";
 }
 
+.eyeColorH
+{
+  animation: colorNav 3s infinite linear;
+}
+
 .phoneColumnHeader
 {
   width: 40px;
@@ -31,4 +36,12 @@ i
 .centerAlignCell
 {
   text-align: center;
+}
+
+@keyframes colorNav
+{
+  0% { color: brown; }
+  33% { color: green;}
+  66% { color: blue;}
+  100% { color: brown;}
 }

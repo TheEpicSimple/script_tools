@@ -69,8 +69,12 @@
           var hC = "";
           if(tblD.meta[i].class !== undefined)
           hC = tblD.meta[i].class;
-
-          tbHeadrs.push( add$(  {name: "th", attrs: {class: hC}, text: tblD.meta[i].title}  ) );
+          var nH = add$( {name: "th", attrs: {class: hC}, text: tblD.meta[i].title} );
+          if(tblD.meta[i].hInit)
+          {
+            tblD.meta[i].hInit.call(nH);
+          }
+          tbHeadrs.push(nH);
         }
       }
       
@@ -95,6 +99,7 @@
             nCV.childs = [];
 
             var nT = "";
+            var nTSpan = null;
             var ic = null;
 
             if (tblD.meta[_j].name !== undefined)
@@ -127,6 +132,12 @@
               }
             }
 
+            if( tblD.meta[_j].isLeftIcon )  
+            {
+              nTSpan = add$({name:"span", text: nT});
+              nT = "";
+            }
+
             if( tblD.meta[_j].link !== undefined )  
             {
               nCV.childs.push(
@@ -135,14 +146,14 @@
                   name: "a",
                   text: nT,
                   attrs: { href: tblD.meta[_j].link( tblD.data[_i] ) },
-                  childs: [ ic, add$({name:"span"}) ]
+                  childs: [ ic, nTSpan ]
                 } )
               );
             }
             else
             {
               nCV.text = nT;
-              nCV.childs.push( ic );
+              nCV.childs.push( ic, nTSpan );
             }
 
             if ( tblD.meta[_j].events !== undefined)
@@ -155,7 +166,7 @@
                   name: tblD.meta[_j].events[_k].name,
                   action: function (e)
                   {
-                    tblD.meta[_j].events[_k].action.bind(this, e, tblD.data[_i])();
+                    tblD.meta[_j].events[_k].action.call(this, e, tblD.data[_i]);
                   }
                 } );
               }
@@ -170,13 +181,14 @@
 
             if (tblD.meta[_j].init !== undefined)
             {
-              tblD.meta[_j].init.bind(nC, tblD.data[_i])();
+              tblD.meta[_j].init.call(nC, tblD.data[_i]);
             }
 
             tds.push( nC );
           }
 
-          for (var j = 0; j < tblD.meta.length; j++) {
+          for (var j = 0; j < tblD.meta.length; j++)
+          {
             _loopJ(j);
           }
 
@@ -201,7 +213,7 @@
       tbody = add$({
         name: "tbody",
         childs: tbRows
-      })
+      });
 
       tfoot = null;
     }

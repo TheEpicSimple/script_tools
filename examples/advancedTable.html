@@ -228,8 +228,11 @@
       },
       {
         title: "Eye Color",
+        name: "eyeColor",
+        isLeftIcon: true,
         icon: "icon-eye",
-        init: function(i){ this.style.color = i.eyeColor; this.className = "centerAlignCell";}
+        init: function(i){ this.style.color = i.eyeColor; this.className = "centerAlignCell";},
+        hInit: function(){ this.className = "eyeColorH"; }
       },
       {
         title: "",
