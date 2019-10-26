@@ -7,7 +7,7 @@
   } else {
     if (window.script_tools.parseTablableData !== undefined) {
       console.warn("parseTablableData has already been declared");
-      return -1;
+      return;
     }
   }
 

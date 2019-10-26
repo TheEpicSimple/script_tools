@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>add$ example</title>
+
+  <link rel="stylesheet" href="./main.css">
+  <link rel="stylesheet" href="./pre.css">
+</head>
+<body>
+
+  <div id="app">  </div>
+  <p>The code behind:</p>
+  <pre> 
+      var add$ = script_tools.advancedCreateE;
+  
+      var t = add$({
+        <b>name</b> : <t>"input"</t>,
+        <b>attrs</b> : {<prop>id</prop>: <t>"redRectangle"</t>, <prop>class</prop>: <t>"redRectangle"</t>, <prop>"data-rnd"</prop>: <t>"rectangular"</t>},
+        <b>props</b> : [<t>"readOnly"</t>], <c>/*
+            props doesn't work with properties that are not already in the html standard. Also be careful because it sets said properties of the html Element Object to true.
+
+            example:
+            if you put <t>"value"</t> in props in an input element, the input element will have a value of <t>"true"</t>.
+          */</c>
+        <b>events</b> : [ <c>// Array of objects that take name of the event, action and event propagation</c>
+          {
+            <prop>name</prop>: <t>"click"</t>,
+            <prop>action</prop>: function()
+            {
+              this.value = <t>"Well, it is actually orange."</t>;
+            },
+            <prop>useCapture</prop>: false <c>// This is optative</c>
+          }
+        ],
+        <b>childs</b> : [ <c>// The childs must be html elements</c>
+          add$( {<prop>name</prop>: <t>"p"</t>, <prop>text</prop>: <t>"Text in p"</t>} )
+        ]
+      });
+    
+      document.getElementById(<t>"app"</t>).appendChild( t );
+  </pre>
+
+<script src="../script_tools/advancedCreateE.js"></script>
+<script src="../script_tools/parseTablableData.js"></script>
+<script>
+  var add$ = script_tools.advancedCreateE;
+  
+  var t = add$({
+    name : "input",
+    attrs : {id: "redRectangle", class: "redRectangle", "data-rnd": "rectangular"},
+    props : ["readOnly"],
+    events : [{ name: "click", action: function() { this.value = "Well, it is actually orange."; } }],
+    childs : [
+      add$( {name: "p", text: "Text in p"} )
+    ]
+  });
+
+  document.getElementById("app").appendChild( t );
+</script>
+</body>
+</html>

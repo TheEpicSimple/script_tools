@@ -208,6 +208,7 @@
 <script src="../script_tools/advancedCreateE.js"></script>
 <script src="../script_tools/parseTablableData.js"></script>
 <script>
+  var add$ = script_tools.advancedCreateE;
   function copyToClipBoard(text)
   {
     var textArea = document.createElement("textarea");
@@ -227,12 +228,12 @@
         init: function(i){ this.title = i.email; }
       },
       {
-        title: "Eye Color",
+        title: "",
         name: "eyeColor",
         isLeftIcon: true,
         icon: "icon-eye",
         init: function(i){ this.style.color = i.eyeColor; this.className = "centerAlignCell";},
-        hInit: function(){ this.className = "eyeColorH"; }
+        hInit: function(){ this.appendChild( add$({name:"i", attrs:{class:"icon-eye eyeColorH"} }) ); }
       },
       {
         title: "",

@@ -1,0 +1,28 @@
+pre
+{
+  background-color: #f8f8f8;
+  white-space: pre-wrap;
+}
+
+pre c
+{
+  color: green;
+}
+
+pre b
+{
+  color: #0468ff;
+  font-size: 1.2em;
+  font-weight: bolder;
+}
+
+pre t
+{
+  color: #b96900;
+}
+
+pre prop
+{
+  color: #0468ff;
+  font-weight: bolder;
+}

@@ -10,7 +10,7 @@
     if(window.script_tools.advancedCreateE !== undefined)
     {
       console.warn("script_tools.advancedCreateE has already been declared");
-      return -1;
+      return;
     }
   }
   
@@ -46,15 +46,26 @@
       {
         var attrs = Object.keys(data.attrs);
 
-        for (let i = 0; i < attrs.length; i++)
+        for (var i = 0; i < attrs.length; i++)
         {
           e.setAttribute( attrs[i] , data.attrs[attrs[i]]);
         }
       }
       else
+        console.warn("Omitting attrs in add$, they are not formated as string nor object");
+    }
+
+    if( data.props !== undefined )
+    {
+      if(typeof data.props === "object")
       {
-        console.warn("Omitting attrs in advancedCreateE (add$), they are not formated as string nor object");
+        for (var i = 0; i < data.props.length; i++)
+        {
+          e[data.props[i]] = true;
+        }
       }
+      else
+        console.warn("Omitting props in add$, they are not formated as an array");
     }
 
     if(Array.isArray(data.childs) )
@@ -67,7 +78,8 @@
     if(Array.isArray(data.events) )
     for(var i = 0; i < data.events.length ; i++)
     {
-      e.addEventListener( data.events[i].name, data.events[i].action );
+      var useCapture = data.events[i].useCapture ? true : false;
+      e.addEventListener( data.events[i].name, data.events[i].action, useCapture );
     }
 
     return e;
