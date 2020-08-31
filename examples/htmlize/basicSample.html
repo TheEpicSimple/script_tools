@@ -15,7 +15,7 @@
   <div id="app">  </div>
   <p>The code behind:</p>
   <pre>
-      var t = add$({
+      var t = ScrTools.htmlize({
         <b>name</b> : <t>"input"</t>,
         <b>attrs</b> : {<prop>id</prop>: <t>"redRectangle"</t>, <prop>class</prop>: <t>"redRectangle"</t>, <prop>"data-rnd"</prop>: <t>"rectangular"</t>},
         <b>props</b> : [<t>"readOnly"</t>], <c>/*
@@ -35,23 +35,23 @@
           }
         ],
         <b>childs</b> : [ <c>// The childs must be html elements</c>
-          add$( {<prop>name</prop>: <t>"p"</t>, <prop>text</prop>: <t>"Text in p"</t>} )
+        ScrTools.htmlize( {<prop>name</prop>: <t>"p"</t>, <prop>text</prop>: <t>"Text in p"</t>} )
         ]
       });
     
       document.getElementById(<t>"app"</t>).appendChild( t );
   </pre>
 
-<script src="../../script_tools/advancedCreateE.js"></script>
-<script src="../../script_tools/parseTablableData.js"></script>
+<script src="../../src/htmlize.js"></script>
+<script src="../../src/tablize.js"></script>
 <script>  
-  var t = add$({
+  var t = ScrTools.htmlize({
     name : "input",
     attrs : {id: "redRectangle", class: "redRectangle", "data-rnd": "rectangular"},
     props : ["readOnly"],
     events : [{ name: "click", action: function() { this.value = "Well, it is actually orange."; } }],
     childs : [
-      add$( {name: "p", text: "Text in p"} )
+    ScrTools.htmlize( {name: "p", text: "Text in p"} )
     ]
   });
 

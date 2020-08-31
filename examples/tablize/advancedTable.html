@@ -222,17 +222,19 @@
   var tablableData = {
     meta: [
       {
-        title: "Name",
-        name: "name",
-        init: function(i){ this.title = i.email; }
+        titleText: "Name",
+        directRelation: "name"
       },
       {
-        title: "",
-        name: "eyeColor",
-        isLeftIcon: true,
-        icon: "icon-eye",
-        init: function(i){ this.style.color = i.eyeColor; this.className = "centerAlignCell";},
-        hInit: function(){ this.appendChild( add$({name:"i", attrs:{class:"icon-eye eyeColorH"} }) ); }
+        onTitle: function(){ this.appendChild( ScrTools.htmlize({name:"i", attrs:{class:"icon-eye eyeColorH"} }) ); },
+        htmlFunction: function( htmlCell, currentTablableData, currentItem){
+          this.style.color = i.eyeColor;
+          this.className = "centerAlignCell";
+          return ScrTools.htmlize({ name:"span", childs:[
+            ScrTools.htmlize({ name:"i",attrs:{class:"icon-eye"}}),
+            document.createTextNode(currentItem.eyeColor)
+          ]});
+        }
       },
       {
         title: "",
@@ -252,7 +254,7 @@
     data: data
   };
   
-  document.getElementById("app").appendChild( script_tools.parseTablableData(tablableData) );
+  document.getElementById("app").appendChild( ScrTools.tablize(tablableData) );
 </script>
 </body>
 </html>
