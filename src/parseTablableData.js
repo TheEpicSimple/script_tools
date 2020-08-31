@@ -1,273 +1,219 @@
 "use strict";
-
-(function()
+(function( parent)
 {
-  if (window.script_tools === undefined) {
-    window.script_tools = {};
-  } else {
-    if (window.script_tools.parseTablableData !== undefined) {
-      console.warn("parseTablableData has already been declared");
-      return;
-    }
-  }
-  
-  function areOH(metaData)
-  {
-    for (var i = 0; i < metaData.length; i++)
-    {
-      if (metaData[i].overHeader !== undefined)
+  switch (undefined) {
+    case parent.ScrTools: parent.ScrTools = {};
+    case parent.ScrTools.tablize:
+      var HookTypeId = { before: 0, after: 1 };
+      var executeHooks = (function( hookTypeId, hookName, htmlElement, tablableData, currentItem)
       {
-        return true;
-      }
-    }
-
-    return false;
-  }
-  
-  function fn (tablableData)
-  {
-    var tblD = tablableData;
-    var thead, tbody, tfoot;
-
-    if(tblD.data === undefined)
-    {
-      console.warn("Call to parseTablableData has no data");
-      return add$({name: "table"});
-    }
-
-    if(tblD.meta !== undefined)
-    {
-      var oHs = areOH(tblD.meta);
-
-      var tbHR = [],
-        tbHeadrs = [],
-        tbOH = [];
-      
-      if(oHs)
-      {
-        for (var i = 0; i < tblD.meta.length; i++)
+        var hookType = tablableData.hooks[hookName];
+        if( hookType === undefined || hooksObj === null)
+          return;
+        if( Array.isArray( hookType) === false)
         {
-          if(tblD.meta[i].overHeader !== undefined)
-          {
-            tbOH.push( add$(  {name: "th", childs: [ tblD.meta[i].overHeader ]}  ) );
-          }
-          else
-          {
-            tbOH.push( add$( {name: "th"}) );
-          }
-
-          tbHeadrs.push( add$(  {name: "th", text: tblD.meta[i].title}  ) );
+          console.warn("Ignoring hook "+ hookName+ " because it is not an array");
+          return;
         }
-        tbHR.push( add$( {name: "tr", childs: tbOH } ) );
-      }
-      else
-      {
-        for (var i = 0; i < tblD.meta.length; i++)
-        {
-          var hC = "";
-          if(tblD.meta[i].class !== undefined)
-          hC = tblD.meta[i].class;
-          var nH = add$( {name: "th", attrs: {class: hC}, text: tblD.meta[i].title} );
-          if(tblD.meta[i].hInit)
+        if( Array.isArray( hookType[hookTypeId]))
+          for( var i = 0; i < hookType[hookTypeId].length; i++)
           {
-            tblD.meta[i].hInit.call(nH);
+            try
+            {
+              hookType[hookTypeId][i].call( htmlElement, htmlElement, tablableData, currentItem);
+            }
+            catch( e)
+            {
+              console.error( "Error while executing hook "+ hookName+ " (hookTypeId "+ hookTypeId+ ",  index"+ i+")");
+              console.error( e);
+            }
           }
-          tbHeadrs.push(nH);
-        }
-      }
-      
-      tbHR.push( add$( {name: "tr", childs: tbHeadrs } ) );
-
-      thead = add$(
-      {
-        name: "thead",
-        childs: tbHR
       } );
-      
-      var tbRows = [];
-      if( tblD.data.length !== 0 )
+      var makeHeader = (function( tblD, thereAreHooks)
       {
-        var _loopI= function(_i)
+        var theader = htmlize({ name: "thead"});
+        if( thereAreHooks)
+          executeHooks( HookTypeId.before, "onHeader", theader, tblD, null);
+    
+        var ths = [];
+    
+        for (var i = 0; i < tblD.columns.length; i++)
         {
-          tds = [];
-
-          var _loopJ= function(_j)
+          var column = tblD.columns[i];
+          var tHeaderCell;
+          if(column.titleText)
+            tHeaderCell = htmlize({ name: "th", text: column.titleText});
+          else if( column.titleHtml)
+            tHeaderCell = htmlize({ name: "th", childs: column.titleHtml});
+          else
+            tHeaderCell = htmlize( {name: "th", text: ""});
+          
+          if(column.onTitle)
           {
-            var nCV = {name: "td"};
-            nCV.childs = [];
+            column.onTitle.call( tHeaderCell, tHeaderCell, tblD, column);
+          }
+          ths.push( tHeaderCell);
+        }
+          
+        var headerRow = htmlize( {name: "tr", childs: ths});
+        theader.appendChild(headerRow);
+    
+        if( thereAreHooks)
+          executeHooks( HookTypeId.after, "onHeader", theader, tblD, null);
+        
+        return theader;
+      } );
+      var makeBody = (function( tblD, thereAreHooks)
+      {
+        var tbody = htmlize({ name:"tbody"});
+        if( thereAreHooks)
+          executeHooks( HookTypeId.before, "onBody", tbody, tblD, null);
 
-            var nT = "";
-            var nTSpan = null;
-            var ic = null;
+        var trs = [];
 
-            if (tblD.meta[_j].name !== undefined)
+        for(var i = 0; i < tblD.data.length; i++)
+        {
+          var item = tblD.data[i];
+
+          var tr = htmlize({ name:"tr"});
+          if( thereAreHooks)
+            executeHooks( HookTypeId.before, "onBodyRow", tr, tblD, item);
+
+          for(var j = 0; j < tblD.columns.length; j++)
+          {
+            var column = tblD.columns[j];
+            
+            if( column.directRelation)
             {
-              nT = tblD.data[_i][ tblD.meta[_j].name ];
+              tr.appendChild( htmlize({ name: "td", text: item[column.directRelation] ? item[column.directRelation] : ""}));
             }
-
-            if (tblD.meta[_j].calc !== undefined)
+            else if( column.stringFunction)
             {
-              nT = tblD.meta[_j].calc( tblD.data[_i] );
+              var td = htmlize({ name: "td"});
+              td.appendChild( document.createTextNode( column.stringFunction.call( td, td, tblD, item)));
+              tr.appendChild( td);
             }
-
-            if( tblD.meta[_j].icon !== undefined )  
+            else if( column.htmlFunction)
             {
-              if (typeof tblD.meta[_j].icon === "string" )
-              {
-                ic = add$(
-                {
-                  name: "i",
-                  attrs: { class: tblD.meta[_j].icon }
-                } );
-              }
-              else if ( typeof tblD.meta[_j].icon === "function" )
-              {
-                ic = add$(
-                {
-                  name: "i",
-                  attrs: { class: tblD.meta[_j].icon(tblD.data[_i]) }
-                } );
-              }
-            }
-
-            if( tblD.meta[_j].isLeftIcon )  
-            {
-              nTSpan = add$({name:"span", text: nT});
-              nT = "";
-            }
-
-            if( tblD.meta[_j].link !== undefined )  
-            {
-              nCV.childs.push(
-                add$(
-                {
-                  name: "a",
-                  text: nT,
-                  attrs: { href: tblD.meta[_j].link( tblD.data[_i] ) },
-                  childs: [ ic, nTSpan ]
-                } )
-              );
+              var td = htmlize({ name: "td"});
+              td.appendChild( column.htmlFunction.call( td, td, tblD, item));
+              tr.appendChild( td);
             }
             else
             {
-              nCV.text = nT;
-              nCV.childs.push( ic, nTSpan );
+              tr.appendChild( htmlize({ name: "td"}));
+              console.warn("There was no matching column content relation function in column "+ j);
             }
-
-            if ( tblD.meta[_j].events !== undefined)
-            {
-              nCV.events = [];
-
-              var _loopK= function(_k)
-              {
-                var useCapture = tblD.meta[_j].events[_k].useCapture ? true : false;
-                nCV.events.push( {
-                  name: tblD.meta[_j].events[_k].name,
-                  action: function (e)
-                  {
-                    tblD.meta[_j].events[_k].action.call(this, e, tblD.data[_i]);
-                  },
-                  useCapture: useCapture
-                } );
-              }
-
-              for (var k = 0; k < tblD.meta[_j].events.length; k++)
-              {
-                _loopK(k);
-              }
-            }
-
-            var nC = add$( nCV );
-
-            if (tblD.meta[_j].init !== undefined)
-            {
-              tblD.meta[_j].init.call(nC, tblD.data[_i]);
-            }
-
-            tds.push( nC );
           }
+          if( thereAreHooks)
+            executeHooks( HookTypeId.after, "onBodyRow", tr, tblD, item);
 
-          for (var j = 0; j < tblD.meta.length; j++)
+          tbody.appendChild(tr);
+        }
+        
+        if( thereAreHooks)
+          executeHooks( HookTypeId.after, "onBody", tbody, tblD, null);
+
+        return tbody;
+      } );
+      var makeFooter = (function( tblD, thereAreHooks)
+      {
+        var tfooter = htmlize({ name:"tfooter"});
+        
+        if( thereAreHooks)
+          executeHooks( HookTypeId.before, "onFooter", tfooter, tblD, null);
+
+        var tr = htmlize({ name:"tr"});
+        for(var i = 0; i < tblD.columns.length; i++)
+        {
+          var column = tblD.columns[i];
+          if( column.footerStringFunction)
+            {
+              var td = htmlize({ name: "td"});
+              td.appendChild( document.createTextNode( column.footerStringFunction.call( td, td, tblD, item)));
+              tr.appendChild( td);
+            }
+            else if( column.footerHtmlFunction)
+            {
+              var td = htmlize({ name: "td"});
+              td.appendChild( column.footerHtmlFunction.call( td, td, tblD, item));
+              tr.appendChild( td);
+            }
+            else
+            {
+              tr.appendChild( htmlize({ name: "td"}));
+            }
+        }
+        
+        tfooter.appendChild(tr);
+        if( thereAreHooks)
+          executeHooks( HookTypeId.after, "onFooter", tfooter, tblD, null);
+        
+        return tfooter;
+      } );
+      parent.ScrTools.tablize = (function tablize(tablableData)
+      {
+        var htmlize = ScrTools.htmlize;
+        
+        var tblD = tablableData;
+        var thereAreHooks = tblD.hooks ? true : false;
+
+        var table = htmlize({name : "table", attrs : {class: "tabled-data"}} );
+        if( thereAreHooks)
+          executeHooks( HookTypeId.before, "onTable", table, tblD, null);
+        
+        var isThereAnyfooter = false;
+        if( tblD.columns)
+        {
+          for (var i = 0; (i < tblD.columns.length) && !isThereAnyfooter; i++)
           {
-            _loopJ(j);
+            if(
+              tblD.columns[i].footerStringFunction ||
+              tblD.columns[i].footerHtmlFunction)
+              isThereAnyfooter = true;
           }
-
-          tbRows.push( add$(  {name: "tr", childs: tds}  ) );
         }
-
-        for (var i = 0; i < tblD.data.length; i++)
+        else
         {
-          _loopI(i);
+          tblD.columns = [];
+          if(tblD.data && tblD.data.length > 0)
+          {
+            var sampleObj = tblD.data[i];
+            Object.keys( sampleObj).forEach( function( key)
+            {
+              if(
+                typeof sampleObj[key] === "number" ||
+                typeof sampleObj[key] === "bigint" ||
+                typeof sampleObj[key] === "string" ||
+                typeof sampleObj[key] === "boolean")
+              {
+                tblD.columns.push({titleText: key, directRelation: key});
+              }
+            } );
+          }
+          else
+          {
+            tblD.data = [];
+            console.warn("There was no definition of columns and no data to make a table of");
+          }
         }
-      }
-      else
-      {
-        var tblC = []
-        for (var i = 0; i < tblD.meta.length; i++)
-        {
-          tblC.push( add$(  {name: "td", attrs: {"data-value": "null"}}  ) );
-        }
-        tbRows.push( add$( {name: "tr", childs: tblC} ) );
-      }
 
-      tbody = add$({
-        name: "tbody",
-        childs: tbRows
-      });
+        if( !tblD.sharedStorage)
+          tblD.sharedStorage = {};
 
-      tfoot = null;
-    }
-    else
-    {
-      var tbHeadrs = [];
-      var tbDK = Object.keys(tblD.data[0]);
-
-      for (var i = 0; i < tbDK.length; i++)
-      {
-        tbHeadrs.push(
-          add$({ name: "th", text: tbDK[i] })
-        );
-      }
-
-      thead = add$(
-      {
-        name: "thead",
-        childs: [
-          add$( {name: "tr", childs: tbHeadrs } )
-        ]
+        table.appendChild( makeHeader( tblD, thereAreHooks));
+        table.appendChild( makeBody( tblD, thereAreHooks));
+        if( isThereAnyfooter)
+          table.appendChild( makeFooter( tblD, thereAreHooks));
+        
+        if( thereAreHooks)
+          executeHooks( HookTypeId.after, "onTable", table, tblD, null);
+        return table;
       } );
-
-      var tbRows = [];
-      for (var i = 0; i < tblD.data.length; i++)
-      {
-        var tds = [];
-
-        for (var j = 0; j < tbDK.length; j++)
-        {
-          tds.push( add$(  {name: "td", text: tblD.data[i][ tbDK[j] ] }  ) );
-        }
-
-        tbRows.push( add$(  {name: "tr", childs : tds}  ) );
+      parent.ScrTools.tablize.prototype = {
+        //
       }
-
-      tbody = add$(
-      {
-        name: "tbody",
-        childs: tbRows
-      } );
-
-      tfoot = null;
-    }
-    
-    return add$({
-      name : "table", attrs : {class: "tabled-data"},
-      childs : [
-        thead,
-        tbody,
-        tfoot
-      ]
-    } );
-  };
-
-  window.script_tools.parseTablableData = fn;
-}) ();
+      break;
+    default: console.warn("SrcTools.tablize is already declared!");
+  }
+})( window);

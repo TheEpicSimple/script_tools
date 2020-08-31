@@ -1,90 +1,58 @@
 "use strict";
-(function()
-{
-  if(window.script_tools === undefined)
-  {
-    window.script_tools = {};
-  }
-  else
-  {
-    if(window.script_tools.advancedCreateE !== undefined)
-    {
-      console.warn("script_tools.advancedCreateE has already been declared");
-      return;
-    }
-  }
+(function( parent)
+{ 
+  switch (undefined) {
+    case parent.ScrTools: parent.ScrTools = {};
+    case parent.ScrTools.htmlize: parent.ScrTools.htmlize = (function htmlize(data){
+      var htmlElem = document.createElement(data.name);
   
-  function fn (data)
-  {
-    var e = document.createElement(data.name);
-
-    if( data.text !== undefined)
-    e.innerText = data.text;
-
-    if( data.attrs !== undefined)
-    {
-      if(typeof data.attrs === "string")
+      if( data.text !== undefined)
+        htmlElem.appendChild( document.createTextNode(data.text));
+  
+      if( data.attrs !== undefined)
       {
-        var s = data.attrs.slice();
-        var re = /[a-zA-Z$_0-9\-]*\s*=/g;
-        var re2 = /=\s*"[^\"]*"/g;
-
-        var a = s.match(re);
-        var v = s.match(re2);
-
-        for (var i = 0; i < a.length; i++)
+        if(typeof data.attrs === "object" )
         {
-          var pName = a[i].replace(/\s*/g, "");
-          pName = pName.substring( 0 , pName.length - 1 );
-          var pValue = v[i].match(/"[^"]*"/)[0];
-          pValue = pValue.substring( 1, pValue.length - 1);
-
-          e.setAttribute(pName, pValue);
+          var attrs = Object.keys(data.attrs);
+  
+          for (var i = 0; i < attrs.length; i++)
+          {
+            htmlElem.setAttribute( attrs[i] , data.attrs[attrs[i]]);
+          }
         }
+        else
+          console.warn("Omitting attrs in htmlize, they are not formated as an object");
       }
-      else if(typeof data.attrs === "object" )
+  
+      if( data.props !== undefined )
       {
-        var attrs = Object.keys(data.attrs);
-
-        for (var i = 0; i < attrs.length; i++)
+        if( Array.isArray( data.props))
         {
-          e.setAttribute( attrs[i] , data.attrs[attrs[i]]);
+          for (var i = 0; i < data.props.length; i++)
+          {
+            htmlElem[data.props[i]] = true;
+          }
         }
+        else
+          console.warn("Omitting props in htmlize, they are not formated as an array");
       }
-      else
-        console.warn("Omitting attrs in add$, they are not formated as string nor object");
-    }
-
-    if( data.props !== undefined )
-    {
-      if(typeof data.props === "object")
+  
+      if( Array.isArray(data.childs))
+      for(var i = 0; i < data.childs.length; i++)
       {
-        for (var i = 0; i < data.props.length; i++)
-        {
-          e[data.props[i]] = true;
-        }
+        if(data.childs[i] !== null)
+          htmlElem.appendChild( data.childs[i]);
       }
-      else
-        console.warn("Omitting props in add$, they are not formated as an array");
-    }
-
-    if(Array.isArray(data.childs) )
-    for(var i = 0; i < data.childs.length ; i++)
-    {
-      if(data.childs[i] !== null)
-      e.appendChild( data.childs[i] );
-    }
-
-    if(Array.isArray(data.events) )
-    for(var i = 0; i < data.events.length ; i++)
-    {
-      var useCapture = data.events[i].useCapture ? true : false;
-      e.addEventListener( data.events[i].name, data.events[i].action, useCapture );
-    }
-
-    return e;
-  };
-
-  window.script_tools.advancedCreateE = fn;
-  window.add$ = fn;
-}) ();
+  
+      if( Array.isArray(data.events))
+      for(var i = 0; i < data.events.length; i++)
+      {
+        var useCapture = data.events[i].useCapture ? true : false;
+        htmlElem.addEventListener( data.events[i].name, data.events[i].action, useCapture);
+      }
+  
+      return htmlElem;
+    } ); break;
+    default: console.warn("SrcTools.htmlize is already declared!");
+  }
+})( window);

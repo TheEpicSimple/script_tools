@@ -1,0 +1,39 @@
+{
+  "columns": [
+    { "titleText": "<string>tableColumnTitle",
+      "titleHtml": "<Array<htmlElement>>",
+      "onTitle":  "function(this htmlCellHeader, currentTablableData, currentColumn){}",
+
+      "directRelation": "<string>objectPropertyName",
+      "stringFunction": "function(this htmlCell, currentTablableData, currentItem){return cellText}",
+      "htmlFunction": "function(this htmlCell, currentTablableData, currentItem){return cellHtmlElement}",
+
+      "footerStringFunction": "function(this htmlFooterCell, currentTablableData){return cellText}",
+      "footerHtmlFunction": "function(this htmlFooterCell, currentTablableData){return cellHtmlElement}"
+    }
+  ],
+  "hooks": {
+    "onTable": [
+      ["function(this htmlTable, currentTablableData){}"],
+      ["function(this htmlTable, currentTablableData){}"]
+    ],
+    "onHeader": [
+      ["function(this htmlTableHeader, currentTablableData){}"],
+      ["function(this htmlTableHeader, currentTablableData){}"]
+    ],
+    "onBody": [
+      ["function(this htmlTableBody, currentTablableData){}"],
+      ["function(this htmlTableBody, currentTablableData){}"]
+    ],
+    "onBodyRow": [
+      ["function(this htmlTableRow, currentTablableData, currentItem){}"],
+      ["function(this htmlTableRow, currentTablableData, currentItem){}"]
+    ],
+    "onFooter": [
+      ["function(this htmlTableFooter, currentTablableData){}"],
+      ["function(this htmlTableFooter, currentTablableData){}"]
+    ]
+  },
+  "sharedStorage": "<Object>",
+  "data": ["<Object>"]
+}
