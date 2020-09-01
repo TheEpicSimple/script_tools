@@ -14,24 +14,15 @@
   <div id="app">  </div>
 
   <div>
-    <p> parseTablableData takes an array of objects as an argument .</p>
+    <p> parseTablableData.data takes an array of objects as an argument .</p>
 
-    <p>object could be said that uses the following interface:</p>
-    <pre>
-      interface tablableData
-      {
-        meta?: tablableDataMeta[];
-
-        data: object[];
-      }
-    </pre>
-
-    <p>You can also describe how to represent the data with the optional meta property.</p>
+    <p>You can also describe how to represent the data with the optional columns property.</p>
   </div>
 
-<script src="../../script_tools/advancedCreateE.js"></script>
-<script src="../../script_tools/parseTablableData.js"></script>
-<script>
+<script src="../../src/htmlize.js"></script>
+<script src="../../src/tablize.js"></script>
+<p>The code for this page: </p>
+<script class="blocky">
   var tablableData = {
     data:[
       {name: "jhon0", surr: "jhon0s", 2: "ad"},
@@ -48,7 +39,7 @@
     ]
   };
   
-  document.getElementById("app").appendChild( script_tools.parseTablableData(tablableData) );
+  document.getElementById("app").appendChild( scrTools.tablize( tablableData));
 </script>
 </body>
 </html>

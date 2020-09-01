@@ -12,37 +12,14 @@
 <body>
 
   <div id="app">  </div>
+  
+  <p>Next the code:</p>
 
-  <div>
-    <p> meta represents the columns of the table, this property has some possibilities: </p>
-    <pre>
-      interface tablableDataMeta
-      {
-        title : string; // header string, what appears as &lt;th&gt;.
-        name?: string; // name corresponds to the property with the same name of the objects in the data.
-        calc?: (item : object) => string // The cell value will be calculated.
-        // You supply the way this is done with a function that receives the object and returns a string.
-        // calc overwrites name.
-        icon? : string / (item : object) => string // creates an &lt;i&gt; element with the class that you specify so you can add an icon with css.
-        link? : (item : object) => string // The returned result of this function will be the url to which the cell content points
-        events? : Array&lt; eventeableData &gt; // Array that describes the events you want in each cell
-        overHeader? : html element that will be in a cell over the header.
-      }
-
-      interface eventeableData
-      {
-        name : string // event name, like click or mouseOver
-        function : ( event : eventdata, item : object ) => void // The function that will be executed, note that has one more parameter relating to the item that will be shown
-      }
-    </pre>
-  </div>
-
-<script src="../../script_tools/advancedCreateE.js"></script>
-<script src="../../script_tools/parseTablableData.js"></script>
-<script>
-  var doSomethingInformative = function (event, item)
+<script src="../../src/htmlize.js"></script>
+<script src="../../src/tablize.js"></script>
+<script class="blocky">
+  var doSomethingInformative = function ( item, event)
   {
-    // this === interacted html element
     if(this.style.backgroundColor === "")
     {
       this.style.backgroundColor = "red";
@@ -51,38 +28,49 @@
     {
       this.style.backgroundColor = "";
     };
-    // event === standart event data
     console.log(event);
-    // item === item from the data that corresponds to the row clicked
     console.log(item);
   };
 
-  var doSomethingElse = function (event, item)
+  var doSomethingElse = function( item, event)
   {
-    // this === interacted html element
     this.innerText = item[2] + " does not have any particular meaning.";
-    // event === standart event data
     console.log(event);
-    // item === item from the data that corresponds to the row clicked
-    item[2] += "<-";
+    item[2] += "<";
   };
 
   var tablableData = {
-    meta:[
-      { title: "Name", name: "name" },
-      {title: "Surname", name: "surr"},
-      {title: "Random Text", name: 2},
+    columns:[
+      { titleText: "Name", directRelation: "name" },
+      { titleText: "Surname", directRelation: "surr"},
+      { titleText: "Random Text", directRelation: 2},
       {
-        title: "icon",
-        icon: function(item){ if(item[2].length > 2){ return "close-icon";}else{return "o-icon"} } 
+        titleText: "icon",
+        htmlFunction: function(htmlCell, currentTablableData, item){
+          return ScrTools.htmlize({
+            name:"i",
+            text: item.name,
+            attrs:{class:(item[2].length > 2) ? "close-icon" : "o-icon"}
+          });
+        },
       },
       {
-        title: "link", name: "name",
-        link: function(item){ return "./" + item.name + ".html"; }
+        titleText: "link", name: "name",
+        htmlFunction: function(htmlCell, currentTablableData, item){ return ScrTools.htmlize({
+          name:"a",
+          text: item.name,
+          attrs:{href:"./" + item.name + ".html"}
+        }); }
       },
-      {title: "events", name: "surr", events: [{ action: doSomethingInformative, name: "click"}] },
-      {title: "calc", calc: function(item){ return item.name + " º  " + item.surr }},
-      {title: "calc + events", calc: function(item){ return item.name + " º  " + item.surr }, events: [{ action: doSomethingElse, name: "click"}] }
+      {titleText: "events", stringFunction: function( htmlCell, currentTablableData, item){
+        htmlCell.addEventListener("click", doSomethingInformative.bind(this, item));
+        return "surr";
+      }},
+      {titleText: "Custom texts", stringFunction: function( htmlCell, currentTablableData, item){ return item.name + " º  " + item.surr }},
+      {titleText: "calculations + custom texts", stringFunction: function( htmlCell, currentTablableData, item){
+        htmlCell.addEventListener("click",doSomethingElse.bind(this, item));
+        return "Mr./Mrs. "+ item.name+ " "+ item.surr;
+      } }
     ],
     data:[
       {name: "jhon0", surr: "jhon0s", 2: "ad"},
@@ -99,7 +87,7 @@
     ]
   };
   
-  document.getElementById("app").appendChild( script_tools.parseTablableData(tablableData) );
+  document.getElementById("app").appendChild( ScrTools.tablize(tablableData) );
 </script>
 </body>
 </html>

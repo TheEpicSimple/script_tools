@@ -4,6 +4,7 @@
   switch (undefined) {
     case parent.ScrTools: parent.ScrTools = {};
     case parent.ScrTools.tablize:
+      var htmlize = ScrTools.htmlize;
       var HookTypeId = { before: 0, after: 1 };
       var executeHooks = (function( hookTypeId, hookName, htmlElement, tablableData, currentItem)
       {
@@ -102,7 +103,6 @@
             else
             {
               tr.appendChild( htmlize({ name: "td"}));
-              console.warn("There was no matching column content relation function in column "+ j);
             }
           }
           if( thereAreHooks)
@@ -153,8 +153,6 @@
       } );
       parent.ScrTools.tablize = (function tablize(tablableData)
       {
-        var htmlize = ScrTools.htmlize;
-        
         var tblD = tablableData;
         var thereAreHooks = tblD.hooks ? true : false;
 

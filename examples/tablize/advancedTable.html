@@ -8,6 +8,7 @@
   <title>Advanced table</title>
 
   <link rel="stylesheet" href="../css/advanced.css">
+  <link rel="stylesheet" href="../css/main.css">
   
   <script>
   var data = [
@@ -205,50 +206,102 @@
 
   <div id="app">  </div>
 
-<script src="../../script_tools/advancedCreateE.js"></script>
-<script src="../../script_tools/parseTablableData.js"></script>
-<script>
-  function copyToClipBoard(text)
+  Here is a declaration of the tablableData Object in a pseudo language:
+  <pre>
+    {
+      "columns": [
+        { "titleText": "&lt;string>tableColumnTitle",
+          "titleHtml": &lt;Array&lt;htmlElement>>",
+          "onTitle":  "function(this htmlCellHeader, currentTablableData, currentColumn){}",
+    
+          "directRelation": "&lt;string>objectPropertyName",
+          "stringFunction": "function(this htmlCell, currentTablableData, currentItem){return cellText}",
+          "htmlFunction": "function(this htmlCell, currentTablableData, currentItem){return cellHtmlElement}",
+    
+          "footerStringFunction": "function(this htmlFooterCell, currentTablableData){return cellText}",
+          "footerHtmlFunction": "function(this htmlFooterCell, currentTablableData){return cellHtmlElement}"
+        }
+      ],
+      "hooks": {
+        "onTable": [
+          ["function(this htmlTable, currentTablableData){}"],
+          ["function(this htmlTable, currentTablableData){}"]
+        ],
+        "onHeader": [
+          ["function(this htmlTableHeader, currentTablableData){}"],
+          ["function(this htmlTableHeader, currentTablableData){}"]
+        ],
+        "onBody": [
+          ["function(this htmlTableBody, currentTablableData){}"],
+          ["function(this htmlTableBody, currentTablableData){}"]
+        ],
+        "onBodyRow": [
+          ["function(this htmlTableRow, currentTablableData, currentItem){}"],
+          ["function(this htmlTableRow, currentTablableData, currentItem){}"]
+        ],
+        "onFooter": [
+          ["function(this htmlTableFooter, currentTablableData){}"],
+          ["function(this htmlTableFooter, currentTablableData){}"]
+        ]
+      },
+      "sharedStorage": "&lt;Object>",
+      "data": ["&lt;Object>"]
+    }
+  </pre>
+<script src="../../src/htmlize.js"></script>
+<script src="../../src/tablize.js"></script>
+<p>Next the code for this page: </p>
+<script class="blocky">
+  function copyToClipBoard(text, target)
   {
     var textArea = document.createElement("textarea");
+    textArea.style.height = "0px";
     textArea.value = text;
-    document.body.appendChild(textArea);
+    target.appendChild(textArea);
     textArea.focus();
     textArea.select();
     document.execCommand('copy');
-    document.body.removeChild(textArea);
+    target.removeChild(textArea);
   }
 
   var tablableData = {
-    meta: [
+    columns: [
       {
         titleText: "Name",
         directRelation: "name"
       },
       {
         onTitle: function(){ this.appendChild( ScrTools.htmlize({name:"i", attrs:{class:"icon-eye eyeColorH"} }) ); },
-        htmlFunction: function( htmlCell, currentTablableData, currentItem){
-          this.style.color = i.eyeColor;
+        htmlFunction: function( htmlCell, currentTablableData, item){
+          this.style.color = item.eyeColor;
           this.className = "centerAlignCell";
           return ScrTools.htmlize({ name:"span", childs:[
             ScrTools.htmlize({ name:"i",attrs:{class:"icon-eye"}}),
-            document.createTextNode(currentItem.eyeColor)
+            document.createTextNode(item.eyeColor)
           ]});
         }
       },
       {
-        title: "",
-        icon: "icon-phone",
-        class: "phoneColumnHeader",
-        init: function(i){ this.className = "centerAlignCell"; this.title = "Clicking this will save "+i.phone+" to the clipboard"},
-        events: [{name: "click", action: function(ev, item){copyToClipBoard(item.phone);} }]
+        titleText: "",
+        htmlFunction: function( htmlCell, currentTablableData, item){
+          this.className = "centerAlignCell phoneColumnHeader";
+          this.title = "Clicking this will save "+item.phone+" to the clipboard"
+          this.addEventListener( "click", function( ev){
+            copyToClipBoard(item.phone, this);
+          } );
+          return ScrTools.htmlize({ name:"i", attrs:{ class: "icon-phone"}});
+        }
       },
-      {title: "Company", name: "company"},
+      {titleText: "Company", directRelation: "company"},
       {
-        title: "balance",
-        calc: function (i) { return i.balance.replace(/[$,.]/g, ""); },
-        icon: "icon-dollar",
-        link: function(i) { return "https://www.google.com/search?q=how much can I do with "+ i.balance.replace(/[$,.]/g, "") +" cents"; }
+        titleText: "balance",
+        htmlFunction: function ( htmlCell, currentTablableData, item) {
+          return ScrTools.htmlize({
+            name:"a", text: item.balance.replace(/[$,.]/g, ""),
+            attrs:{href:"https://www.google.com/search?q=how much can I do with "+ item.balance.replace(/[$,.]/g, "") +" cents"},
+            childs:[ ScrTools.htmlize({ name:"i", attrs:{class:"icon-dollar"}})]
+          } );
+        }
       },
     ],
     data: data
